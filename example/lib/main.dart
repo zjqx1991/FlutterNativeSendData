@@ -17,10 +17,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+//    initPlatformState();
   }
 
-  //向通道发送获取平台系统版本号
+  ///向通道发送获取平台系统版本号
   Future<void> initPlatformState() async {
     String platformVersion;
     try {
@@ -39,6 +39,29 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  ///向通道发送参数
+  Future<void> sendParams() async{
+    Map map = {
+      "name":"Revan",
+      "age" :29
+    };
+    FlutterNativeSendData.flutterToNativeParams(map);
+  }
+
+  void receiveData() async{
+    Map mapdata;
+    try {
+      mapdata = await FlutterNativeSendData.flutterReceiveData();
+    }
+    on PlatformException {
+      _platformVersion = "没有获取到底层的数据";
+    }
+
+    setState(() {
+      _platformVersion = "${mapdata['platform']}: ${mapdata['systemVersion']}";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -47,7 +70,19 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Flutter层向底层发送数据'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column (
+            children: <Widget>[
+              RaisedButton(
+                child: Text('向底层发送参数'),
+                  onPressed: sendParams,
+              ),
+              RaisedButton(
+                  child: Text('接收底层返回参数'),
+                  onPressed: receiveData
+              ),
+              Text('Running on: $_platformVersion\n'),
+            ],
+          )
         ),
       ),
     );

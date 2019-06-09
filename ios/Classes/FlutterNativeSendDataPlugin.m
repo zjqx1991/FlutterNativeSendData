@@ -26,6 +26,17 @@
   if ([@"getPlatformVersion" isEqualToString:call.method]) {
     result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
   }
+  else if ([@"sendNativeParams" isEqualToString:call.method]) {
+      NSLog(@"iOS层收到数据：%@", call.arguments[@"name"]);
+      NSLog(@"iOS层收到数据：%@", call.arguments[@"age"]);
+  }
+  else if ([@"receiveNativeData" isEqualToString:call.method]) {
+      
+      result(@{
+               @"platform" : @"iOS",
+               @"systemVersion" : [[UIDevice currentDevice] systemVersion]
+               });
+  }
   else {
     result(FlutterMethodNotImplemented);
   }

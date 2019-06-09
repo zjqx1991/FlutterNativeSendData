@@ -24,4 +24,16 @@ class FlutterNativeSendData {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
+
+
+  ///Flutter层向底层传递数据
+  static Future<void> flutterToNativeParams(Map args) async{
+    _channel.invokeMethod('sendNativeParams', args);
+  }
+
+  ///Flutter层向底层获取数据
+  static Future<Map> flutterReceiveData() async {
+    final Map mapdata = await _channel.invokeMethod("receiveNativeData");
+    return mapdata;
+  }
 }

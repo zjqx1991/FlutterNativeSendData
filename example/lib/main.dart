@@ -20,6 +20,7 @@ class _MyAppState extends State<MyApp> {
     initPlatformState();
   }
 
+  //向通道发送获取平台系统版本号
   Future<void> initPlatformState() async {
     String platformVersion;
     try {
